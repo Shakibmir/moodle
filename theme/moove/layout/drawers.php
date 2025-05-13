@@ -64,14 +64,9 @@ $overflow = '';
 if ($PAGE->has_secondary_navigation()) {
     $secondary = $PAGE->secondarynav;
 
-    // only build Course/Grades tabs for teachers/managers
-    $context = \context_course::instance($PAGE->course->id);
-    if ( has_capability('moodle/course:update', $context)
-         && $secondary->get_children_key_list() ) {
+    if ($secondary->get_children_key_list()) {
         $tablistnav = $PAGE->has_tablist_secondary_navigation();
-        $moremenu = new \core\navigation\output\more_menu(
-            $PAGE->secondarynav, 'nav-tabs', true, $tablistnav
-        );
+        $moremenu = new \core\navigation\output\more_menu($PAGE->secondarynav, 'nav-tabs', true, $tablistnav);
         $secondarynavigation = $moremenu->export_for_template($OUTPUT);
         $extraclasses[] = 'has-secondarynavigation';
     }
@@ -117,11 +112,6 @@ $templatecontext = [
 
 $themesettings = new \theme_moove\util\settings();
 
-// Add skipdrawers to the context before merging with footer settings
-$skipdrawers = (strpos($_SERVER['REQUEST_URI'], '/course/view.php') === 0);
-$templatecontext['skipdrawers'] = $skipdrawers;
-
 $templatecontext = array_merge($templatecontext, $themesettings->footer());
 
 echo $OUTPUT->render_from_template('theme_moove/drawers', $templatecontext);
-

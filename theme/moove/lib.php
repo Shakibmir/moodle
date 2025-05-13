@@ -245,24 +245,3 @@ function theme_moove_serve_hvp_css($filename, $theme) {
 
     die;
 }
-
-function theme_moove_extend_navigation_course(\navigation_node $navigation,
-                                              \stdClass $course,
-                                              \context_course $context) {
-    error_log('custom nav hook is working');
-    foreach ($navigation->children as $sectionnode) {
-        if ($sectionnode->type !== navigation_node::TYPE_SECTION) {
-            continue;
-        }
-        foreach ($sectionnode->children as $childkey => $childnode) {
-            if ($childnode->type !== navigation_node::TYPE_ACTIVITY) {
-                continue;
-            }
-            $url = $childnode->action->get_url(false);
-            if ($url instanceof \moodle_url
-                    && stripos($url->out(false), '/mod/label/') !== false) {
-                $sectionnode->remove($childkey);
-            }
-        }
-    }
-}
